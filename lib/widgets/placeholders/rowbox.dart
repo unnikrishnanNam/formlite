@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class RowBox extends StatefulWidget {
@@ -19,7 +17,7 @@ class _RowBoxState extends State<RowBox> {
     if (widget.renderType == 0) {
       return Draggable(
         data: RowBox(renderType: 1),
-        feedback: RowBox(renderType: 2),
+        feedback: RowBox(renderType: -1),
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
           height: 45,
@@ -50,7 +48,7 @@ class _RowBoxState extends State<RowBox> {
     if (widget.renderType == 1) {
       return DragTarget<Widget>(
         onAccept: (data) => setState(() {
-          rowChildren.add(Flexible(child: data));
+          rowChildren.add(data);
           widget.children = rowChildren;
           log(rowChildren.toString());
         }),
@@ -58,7 +56,7 @@ class _RowBoxState extends State<RowBox> {
             List<dynamic> rejectedData) {
           return Container(
             // height: 50,
-            width: 220,
+            // width: 220,
             margin: const EdgeInsets.all(8),
             decoration: BoxDecoration(
                 color: const Color(0xFFA3A7BA).withOpacity(0.05),
@@ -73,15 +71,44 @@ class _RowBoxState extends State<RowBox> {
                           child: Text(
                             'RowBox Placeholder',
                             style: TextStyle(
-                                color: Color(0xFFA3A7BA).withOpacity(0.8)),
+                                color:
+                                    const Color(0xFFA3A7BA).withOpacity(0.8)),
                           ),
                         ),
                       ]
-                    : rowChildren,
+                    : rowChildren.map((e) => Flexible(child: e)).toList(),
               ),
             ),
           );
         },
+      );
+    }
+
+    if (widget.renderType == 2) {
+      return Container(
+        // height: 50,
+        // width: 220,
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            color: const Color(0xFFA3A7BA).withOpacity(0.05),
+            borderRadius: BorderRadius.circular(5)),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: widget.children.isEmpty
+                ? [
+                    Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Text(
+                        'RowBox Placeholder',
+                        style: TextStyle(
+                            color: const Color(0xFFA3A7BA).withOpacity(0.8)),
+                      ),
+                    ),
+                  ]
+                : widget.children.map((e) => Flexible(child: e)).toList(),
+          ),
+        ),
       );
     }
     return Material(

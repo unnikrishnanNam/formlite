@@ -24,12 +24,12 @@ class Button extends StatelessWidget {
             gradient: LinearGradient(
               colors: primary
                   ? [
-                      Color(0xFFF66052),
-                      Color(0xFFDE3178),
+                      const Color(0xFFF66052),
+                      const Color(0xFFDE3178),
                     ]
                   : [
-                      Color(0xFFA3A7BA),
-                      Color(0xFFA3A7BA),
+                      const Color(0xFFA3A7BA),
+                      const Color(0xFFA3A7BA),
                     ],
             ),
             boxShadow: [

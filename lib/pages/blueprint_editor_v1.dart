@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:formlite/pages/blueprint_viewer_page.dart';
 import 'package:formlite/widgets/button.dart';
 import 'package:formlite/widgets/icon_textinput_field.dart';
 import 'package:formlite/widgets/placeholders/colbox.dart';
@@ -25,10 +27,10 @@ class WidgetNode {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = {
-      'type': type,
-      'children': children.map((child) => child.toJson()).toList(),
-      'hint': hint,
-      'id': id,
+      "type": type,
+      "children": children.map((child) => child.toJson()).toList(),
+      "hint": hint,
+      "id": id,
     };
     return json;
   }
@@ -77,14 +79,13 @@ class _BluePrintEditorv1PageState extends State<BluePrintEditorv1Page> {
     } else if (widget is ListView) {
       final List<WidgetNode> childrenNodes =
           acceptedData.map((child) => serializeWidgetToNode(child)).toList();
-      return WidgetNode(type: 'listView', children: childrenNodes);
+      return WidgetNode(type: 'column', children: childrenNodes);
     } else if (widget is ColBox) {
       final List<WidgetNode> childrenNodes =
           widget.children.map((child) => serializeWidgetToNode(child)).toList();
-      return WidgetNode(type: 'col', children: childrenNodes);
+      return WidgetNode(type: 'column', children: childrenNodes);
     } else if (widget is TextBox) {
-      log(widget.controller?.text ?? '');
-      return WidgetNode(type: 'textBox', hint: widget.controller?.text ?? '');
+      return WidgetNode(type: 'textBox', hint: widget.hintText);
     }
     // You can add more conditions for other widgets as needed
 
@@ -131,8 +132,6 @@ class _BluePrintEditorv1PageState extends State<BluePrintEditorv1Page> {
                                 text: 'Save',
                                 onTap: () {
                                   setState(() {
-                                    // yourJsonString = jsonStringController.text;
-                                    // log('yourJsonString: $yourJsonString');
                                     serializeWidgetToNode(layout);
                                     final serializedLayout =
                                         serializeWidgetToNode(layout);
@@ -140,10 +139,13 @@ class _BluePrintEditorv1PageState extends State<BluePrintEditorv1Page> {
                                     // Convert the JSON structure to a JSON string
                                     final jsonLayout =
                                         serializedLayout.toJson();
-                                    final jsonString = jsonLayout.toString();
+                                    final jsonString = jsonEncode(jsonLayout);
 
                                     // Print the JSON string
-                                    print(jsonString);
+                                    // print(jsonString);
+                                    setState(() {
+                                      yourJsonString = jsonString;
+                                    });
                                   });
                                 },
                               ),
@@ -155,7 +157,15 @@ class _BluePrintEditorv1PageState extends State<BluePrintEditorv1Page> {
                               flex: 2,
                               child: Button(
                                 text: 'Preview the Blueprint',
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => BlueprintViewerPage(
+                                          jsonString: yourJsonString),
+                                    ),
+                                  );
+                                },
                                 primary: false,
                               ),
                             )

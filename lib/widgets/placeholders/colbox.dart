@@ -3,7 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 class ColBox extends StatefulWidget {
-  ColBox({super.key, this.renderType = 0});
+  ColBox({
+    super.key,
+    this.renderType = -1,
+    this.children = const [],
+  });
   final int renderType;
   List<Widget> children = [];
 
@@ -18,7 +22,7 @@ class _ColBoxState extends State<ColBox> {
     if (widget.renderType == 0) {
       return Draggable(
         data: ColBox(renderType: 1),
-        feedback: ColBox(renderType: 2),
+        feedback: ColBox(renderType: -1),
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
           height: 45,
@@ -74,8 +78,8 @@ class _ColBoxState extends State<ColBox> {
                                 child: Text(
                                   'Column Box Placeholder',
                                   style: TextStyle(
-                                      color:
-                                          Color(0xFFA3A7BA).withOpacity(0.8)),
+                                      color: const Color(0xFFA3A7BA)
+                                          .withOpacity(0.8)),
                                 ),
                               ),
                             ),
@@ -83,6 +87,36 @@ class _ColBoxState extends State<ColBox> {
                         : colChildren)),
           );
         },
+      );
+    }
+
+    if (widget.renderType == 2) {
+      return Container(
+        // height: 50,
+        // width: 220,
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            color: const Color(0xFFA3A7BA).withOpacity(0.05),
+            borderRadius: BorderRadius.circular(5)),
+        child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: widget.children.isEmpty
+                    ? [
+                        Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Center(
+                            child: Text(
+                              'Column Box Placeholder',
+                              style: TextStyle(
+                                  color:
+                                      const Color(0xFFA3A7BA).withOpacity(0.8)),
+                            ),
+                          ),
+                        ),
+                      ]
+                    : widget.children)),
       );
     }
     return Material(

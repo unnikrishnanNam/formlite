@@ -1,7 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:formlite/widgets/icon_textinput_field.dart';
-import 'package:formlite/widgets/placeholders/colbox.dart';
 
 List<Widget> acceptedData = [];
 
@@ -13,7 +12,7 @@ Widget layout = ListView.builder(
 );
 
 class ViewportV1 extends StatefulWidget {
-  ViewportV1({super.key, required this.data});
+  const ViewportV1({super.key, required this.data});
   final String data;
 
   @override
